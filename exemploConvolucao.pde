@@ -1,13 +1,22 @@
 PImage frame1;
 PImage frame2;
+PImage setaUp;
+PImage setaDown;
+PImage setaLeft;
+PImage setaRight;
+
 int frame1INT[][] ;
 int frame2INT[][] ;
 float fluxo[][][]    ;
 
 void setup(){
-    size(632,252);
-    frame1 = loadImage("yos9BMP.bmp");
-    frame2 = loadImage("yos10BMP.bmp");
+    size(1280,480);
+    frame1 = loadImage("leandro1.jpg");
+    frame2 = loadImage("leandro2.jpg");
+    setaUp = loadImage("setaUp.png");
+    setaDown = loadImage("setaDown.png");
+    setaLeft = loadImage("setaLeft.png");
+    setaRight = loadImage("setaRight.png");
     frame1.filter(GRAY);
     frame1.loadPixels();
     frame2.filter(GRAY);
@@ -31,12 +40,12 @@ void setup(){
     }
     int t = millis();
     print("\tCOMECANDO PROCESSAMENTO \n" );
-    OpticalFlow estimador = new OpticalFlow(1,5);
+    OpticalFlow estimador = new OpticalFlow(1,40);
     fluxo = estimador.estimarFluxo(frame1INT,frame2INT);
     print("\tTERMINANDO PROCESSAMENTO" + (millis() -t));        
     //PRINTANDO A REPRESENTACAO
     image(frame2,0,0);
-    image(frame1,316,0);
+    image(frame1,640,0);
      for(int i = 0; i < frame2.height; i+=4){
          for(int j = 0; j < frame2.width; j+=4){
              int numeroMedia = 0;
@@ -66,10 +75,13 @@ void setup(){
              //CALCULANDO MEDIA
              valorU /= numeroMedia;
              valorV /= numeroMedia;
-             if(valorV >= 0){
-                 print("CiMa\t");
-             }else{
-                 print("Baixo\t");
+             float angulo = asin(valorU/sqrt(valorU*valorU+valorV*valorV));
+             if(valorV > 0){
+                  rotate(angulo);
+                 image(setaUp,i,j,4,4);
+             }else if(valorU < 0){
+                 rotate(angulo);
+                 image(setaDown,i,j,4,4);
              }
          }
      }

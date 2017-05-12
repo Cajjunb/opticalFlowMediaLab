@@ -97,7 +97,7 @@ class OpticalFlow{
                      int p = frameX[i][j] * valorU + 
                              frameY[i][j] * valorV + 
                              frame1T[i][j];
-                     int d = lambda + frameX2[i][j] + frameY2[i][j];
+                     int d = lambda + frameX[i][j]*frameX[i][j] + frameY[i][j]*frameY[i][j];
                      fluxo[i][j][0] = (int)valorU  - frameX[i][j] *( p / d );
                      fluxo[i][j][1] = (int)valorV  - frameY[i][j] *( p / d );
                  } 

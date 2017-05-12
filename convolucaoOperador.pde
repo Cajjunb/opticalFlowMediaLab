@@ -67,7 +67,7 @@ class convolucaoOperador{
                       int jj = j + (n - kCenterX);
                       // ignore input samples which are out of bound
                       if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                          out[i][j] += in1[ii][jj] * derivateX[mm][nn] + in2[ii][jj] * derivateX[mm][nn];  
+                          out[i][j] += in1[ii][jj] *0.25* derivateX[mm][nn] + in2[ii][jj] *0.25* derivateX[mm][nn];  
                   }
               }
           }
@@ -124,7 +124,7 @@ class convolucaoOperador{
                       int jj = j + (n - kCenterX);
                       // ignore input samples which are out of bound
                       if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                          out[i][j] += in1[ii][jj] * derivateY[mm][nn] + in2[ii][jj] * derivateY[mm][nn];  
+                          out[i][j] += in1[ii][jj] * 0.25*derivateY[mm][nn] + in2[ii][jj] * 0.25*derivateY[mm][nn];  
                   }
               }
           }
@@ -206,7 +206,7 @@ class convolucaoOperador{
                       int jj = j + (n - kCenterX);
                       // ignore input samples which are out of bound
                       if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                          out[i][j] += in1[ii][jj] * derivateT1[mm][nn] + in2[ii][jj] * derivateT2[mm][nn];  
+                          out[i][j] += in1[ii][jj] * 0.25* derivateT1[mm][nn] + in2[ii][jj] * 0.25 * derivateT2[mm][nn];   //<>//
                   }
               }
           }
