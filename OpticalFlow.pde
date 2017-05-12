@@ -57,14 +57,13 @@ class OpticalFlow{
          int average  = 0;
          
          // INICIALIZANDO
-         k = 0;
-         for(int i = 0; i < linhas; ++linhas)
-             for(int j = 0; j < colunas; ++colunas){
+         for(int i = 0; i < linhas; ++i)
+             for(int j = 0; j < colunas; ++j){
                  fluxo[i][j][0] = 0;
                  fluxo[i][j][1] = 0;
              }
          
-         for(int k; k < kMax; k++){
+         for(int k = 0; k < kMax; k++){
              for(int i = 0; i < linhas; ++i){
                  for(int j = 0; j < colunas; ++j){
                      int numeroMedia = 0;
