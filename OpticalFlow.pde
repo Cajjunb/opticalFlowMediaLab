@@ -41,10 +41,10 @@ class OpticalFlow{
         return out;
     }
     
-    
-    int[][][] estimarFluxo(int frame1[][],int frame2 [][]){
+     //<>//
+    float[][][] estimarFluxo(int frame1[][],int frame2 [][]){
          //Instanciando Matrix de duplas do fluxo, cada ponto do fluxo tera um valor de u e v
-         int fluxo[][][] = new int[frame1.length][frame1[0].length][2];
+         float fluxo[][][] = new float[frame1.length][frame1[0].length][2];
          //Calculando todas as derivadas dos frames necessarias para o calculo
          this.frameX = this.operador.derivarX(frame1,frame2);
          this.frameY = this.operador.derivarY(frame1,frame2);
@@ -102,7 +102,7 @@ class OpticalFlow{
                      fluxo[i][j][1] = (int)valorV  - frameY[i][j] *( p / d );
                  } 
              }                  
-         }
+         } //<>//
          return fluxo;
     }
 
