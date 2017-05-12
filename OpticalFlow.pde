@@ -29,10 +29,10 @@ class OpticalFlow{
         int rows = input.length;
         int cols = input[0].length;
         int sum  = 0;
-        int out[][] = new int[rows][cols]
+        int out[][] = new int[rows][cols];
         for(int i = 0; i < rows; ++i){
             for(int j = 0; j < cols; ++j){
-                for(int n = 0 ; n < cols; ++n){
+                for(int n = 0 ; n < rows; ++n){
                     sum = sum + input[i][n] * input[n][j];   
                 }
                 out[i][j] = sum;
@@ -70,22 +70,22 @@ class OpticalFlow{
                      int valorU      = 0;
                      int valorV      = 0;
                      //Calculando a media em geral perto
-                     if(i - 1 < 0){
+                     if(i - 1 > 0){
                          ++numeroMedia;
                          valorU += fluxo[i-1][j][0];
                          valorV += fluxo[i-1][j][1];
                      }
-                     if(i + 1 > linhas){
+                     if(i + 1 < linhas){
                          ++numeroMedia;
                          valorU += fluxo[i+1][j][0];
                          valorV += fluxo[i+1][j][1];
                      }
-                     if(j - 1 < 0){
+                     if(j - 1 > 0){
                          ++numeroMedia;
                          valorU += fluxo[i][j-1][0];
                          valorV += fluxo[i][j-1][1];
                      }
-                     if(k + 1 > colunas){
+                     if(j + 1 < colunas){
                          ++numeroMedia;
                          valorU += fluxo[i][j+1][0];
                          valorV += fluxo[i][j+1][1];
