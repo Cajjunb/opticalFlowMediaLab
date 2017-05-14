@@ -54,7 +54,6 @@ class OpticalFlow{
 
          int linhas   =  frame1.length;
          int colunas  = frame1[0].length;
-         int average  = 0;
          
          // INICIALIZANDO
          for(int i = 0; i < linhas; ++i)
@@ -64,9 +63,10 @@ class OpticalFlow{
              }
          
          for(int k = 0; k < kMax; k++){
+             float fluxoMedio[][][] = this.operador.calcularMediaVetor(fluxo);
              for(int i = 0; i < linhas; ++i){
                  for(int j = 0; j < colunas; ++j){
-                     int numeroMedia = 0;
+                     /*int numeroMedia = 0;
                      int valorU      = 0;
                      int valorV      = 0;
                      //Calculando a media em geral perto
@@ -93,13 +93,13 @@ class OpticalFlow{
                      //CALCULANDO MEDIA
                      valorU /= numeroMedia;
                      valorV /= numeroMedia;
-                     
-                     int p = frameX[i][j] * valorU + 
-                             frameY[i][j] * valorV + 
-                             frame1T[i][j];
+                     */
+                     int p = (int)(frameX[i][j] * fluxoMedio[i][j][0] + 
+                             frameY[i][j] * fluxoMedio[i][j][1] + 
+                             frame1T[i][j]);
                      int d = lambda + frameX[i][j]*frameX[i][j] + frameY[i][j]*frameY[i][j];
-                     fluxo[i][j][0] = (int)valorU  - frameX[i][j] *( p / d );
-                     fluxo[i][j][1] = (int)valorV  - frameY[i][j] *( p / d );
+                     fluxo[i][j][0] = (int)fluxoMedio[i][j][0]  - frameX[i][j] *( p / d );
+                     fluxo[i][j][1] = (int)fluxoMedio[i][j][1]  - frameY[i][j] *( p / d );
                  } 
              }                  
          } //<>//
