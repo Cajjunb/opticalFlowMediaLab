@@ -1,7 +1,7 @@
 class OpticalFlow{
     //ITERADOR NUMERO e numero maximo de iteracoes
     private int k = 0;
-    private int kMax = 5;
+    private int kMax ;
     
     //FRAMES E DERIVADAS
     private int frameX[][];
@@ -54,15 +54,18 @@ class OpticalFlow{
 
          int linhas   =  frame1.length;
          int colunas  = frame1[0].length;
+         float soma;
+         int numeroPixels = frame1.length * frame1[0].length;
          
          // INICIALIZANDO
          for(int i = 0; i < linhas; ++i)
              for(int j = 0; j < colunas; ++j){
                  fluxo[i][j][0] = 0;
                  fluxo[i][j][1] = 0;
-             }
-         
-         for(int k = 0; k < kMax; k++){
+             }    
+         do{
+             //Reinicia a condicao de parada
+             soma = 0;
              float fluxoMedio[][][] = this.operador.calcularMediaVetor(fluxo);
              for(int i = 0; i < linhas; ++i){
                  for(int j = 0; j < colunas; ++j){
@@ -98,11 +101,15 @@ class OpticalFlow{
                              frameY[i][j] * fluxoMedio[i][j][1] + 
                              frame1T[i][j]);
                      int d = lambda + frameX[i][j]*frameX[i][j] + frameY[i][j]*frameY[i][j];
+                     float uAntigo = fluxo[i][j][0];
+                     float vAntigo = fluxo[i][j][0] ;
                      fluxo[i][j][0] = (int)fluxoMedio[i][j][0]  - frameX[i][j] *( p / d );
                      fluxo[i][j][1] = (int)fluxoMedio[i][j][1]  - frameY[i][j] *( p / d );
+                     soma  += pow(uAntigo - fluxo[i][j][0],2) + pow(vAntigo - fluxo[i][j][1],2) ;
                  } 
-             }                  
-         } //<>//
+             } 
+             print(soma/numeroPixels + "\n");
+         }while(soma/numeroPixels >= kMax*kMax); //<>//
          return fluxo;
     }
 
