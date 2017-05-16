@@ -108,7 +108,6 @@ class OpticalFlow{
                      soma  += pow(uAntigo - fluxo[i][j][0],2) + pow(vAntigo - fluxo[i][j][1],2) ;
                  } 
              } 
-             print(soma/numeroPixels + "\n");
          }while(soma/numeroPixels >= kMax*kMax); //<>//
          return fluxo;
     }

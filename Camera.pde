@@ -107,11 +107,9 @@ class cameraInput {
              valorV /= numeroMedia;
              float angulo = asin(valorU/sqrt(valorU*valorU+valorV*valorV));
              if(valorV > 0){
-                  rotate(angulo);
-                 image(setaUp,i,j,1,1);
+                 image(setaUp,j,i,1,1);
              }else if(valorU < 0){
-                 rotate(angulo);
-                 image(setaDown,i,j,1,1);
+                 image(setaDown,j,i,1,1);
              }
          }
      }
