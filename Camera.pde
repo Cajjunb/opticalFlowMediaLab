@@ -11,7 +11,11 @@ class cameraInput {
   PImage frame1;
   PImage frame2;
   PImage setaUp;
+  PImage setaUpRight;
+  PImage setaUpLeft;  
   PImage setaDown;
+  PImage setaDownRight;
+  PImage setaDownLeft; 
   PImage setaLeft;
   PImage setaRight;
   
@@ -32,6 +36,10 @@ class cameraInput {
       setaDown = loadImage("setaDown.png");
       setaLeft = loadImage("setaLeft.png");
       setaRight = loadImage("setaRight.png");
+      setaUpLeft = loadImage("setaUpLeft.png");
+      setaUpRight = loadImage("setaUpRight.png");
+      setaDownLeft = loadImage("setaDownLeft.png");
+      setaDownRight = loadImage("setaDownRight.png");
   }
   
   void calculaFluxo(){
@@ -79,10 +87,10 @@ class cameraInput {
      for(int i = 0; i < frame2.height; i+=1){
          for(int j = 0; j < frame2.width; j+=1){
              int numeroMedia = 0;
-             int valorU      = 0;
-             int valorV      = 0;
+             float valorU      = 0;
+             float valorV      = 0;
              //Calculando a media em geral perto
-             if(i - 1 > 0){
+             /*if(i - 1 > 0){
                  ++numeroMedia;
                  valorU += fluxo[i-1][j][0];
                  valorV += fluxo[i-1][j][1];
@@ -101,15 +109,31 @@ class cameraInput {
                  ++numeroMedia;
                  valorU += fluxo[i][j+1][0];
                  valorV += fluxo[i][j+1][1];
-             }
+             }*/
              //CALCULANDO MEDIA
-             valorU /= numeroMedia;
-             valorV /= numeroMedia;
-             float angulo = asin(valorU/sqrt(valorU*valorU+valorV*valorV));
-             if(valorV > 0){
-                 image(setaUp,j,i,1,1);
-             }else if(valorU < 0){
-                 image(setaDown,j,i,1,1);
+             valorU = fluxo[i][j][0];
+             valorV = fluxo[i][j][1];
+             if(valorU != 0 && valorV != 0){
+                 // Calculando o angulo para ser mostrado, levamos em conta se o numero passou de -1 e 1
+                 float angulo = asin(valorU/sqrt(valorU*valorU+valorV*valorV));
+                 if( angulo < 0)
+                     angulo += 2*PI;
+                 if(angulo > 0 && angulo <= 2*PI/8)
+                     image(setaRight,j,i,1,1);
+                 else if(angulo > 2*PI/8 && angulo <= 2*2*PI/8)
+                     image(setaUpRight,j,i,1,1);
+                 else if(angulo > 2*2*PI/8 && angulo <= 3*2*PI/8)
+                     image(setaUp,j,i,1,1);
+                 else if(angulo > 3*2*PI/8 && angulo <= 4*2*PI/8)
+                     image(setaUpLeft,j,i,1,1);
+                 else if(angulo > 4*2*PI/8 && angulo <= 5*2*PI/8)
+                     image(setaLeft,j,i,1,1);
+                 else if(angulo > 5*2*PI/8 && angulo <= 6*2*PI/8)
+                     image(setaDownLeft,j,i,1,1);
+                 else if(angulo > 6*2*PI/8 && angulo <= 7*2*PI/8)
+                     image(setaDown,j,i,1,1);
+                 else if(angulo > 7*2*PI/8 && angulo <= 2*PI)
+                     image(setaDownRight,j,i,1,1);
              }
          }
      }
