@@ -42,7 +42,7 @@ class cameraInput {
       setaDownRight = loadImage("setaDownRight.png");
   }
   
-  void calculaFluxo(){
+  float[][][] calculaFluxo(){
     this.frame1.copy(this.cameraPrincipal,0,0,this.cameraPrincipal.width,this.cameraPrincipal.height,0,0,this.cameraPrincipal.width,this.cameraPrincipal.height);
     this.frame1.updatePixels();
     this.cameraPrincipal.read();
@@ -77,12 +77,12 @@ class cameraInput {
     OpticalFlow estimador = new OpticalFlow(40,20);
     fluxo = estimador.estimarFluxo(frame1INT,frame2INT);
     print("\tTERMINANDO PROCESSAMENTO" + (millis() -t));        
+    return fluxo;
   }
   
   //Mostra FLuxo
   void displayFluxo(){
     image(frame1,0,0);
-    image(frame2,400,0);
     //PRINTANDO A REPRESENTACAO
      for(int i = 0; i < frame2.height; i+=1){
          for(int j = 0; j < frame2.width; j+=1){
