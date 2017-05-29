@@ -212,7 +212,7 @@ class cameraInput {
     if (this.cameraPrincipal.available() == true) {  
       this.frameAnterior.copy(this.cameraPrincipal,0,0,this.cameraPrincipal.width,this.cameraPrincipal.height,0,0,this.cameraPrincipal.width,this.cameraPrincipal.height);
       this.frameAnterior.updatePixels();
-      delay(500);
+      delay(100);
       this.cameraPrincipal.read();
     }
     image(this.cameraPrincipal,200 , 0);

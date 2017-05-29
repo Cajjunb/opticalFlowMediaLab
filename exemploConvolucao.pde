@@ -11,14 +11,14 @@ PImage setaRight;
 float  fluxoCamera[][][];
 float  fluxoDisplay[][][];
 
-final int  linhasDisplay = 10;
-final int  colunasDisplay = 10;
+final int  linhasDisplay = 60;
+final int  colunasDisplay = 55;
 
 
 cameraInput camera;
 
 void setup(){
-    size(1280,480);
+    size(700,280);
     camera = new cameraInput(this);
     setaUp = loadImage("setaUp.png");
     setaDown = loadImage("setaDown.png");
@@ -85,7 +85,7 @@ void draw(){
             }else{
                 fill(#ffffff);
             }
-            rect(j*5,300+i*5,5,5);
+            rect(320+j*5,i*5,5,5);
         }
     }
     camera.displayFluxo();
