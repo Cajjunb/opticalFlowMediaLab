@@ -41,14 +41,14 @@ class OpticalFlow{
         return out;
     }
     
-     //<>// //<>//
+     //<>//
     float[][][] estimarFluxo(int frame1[][],int frame2 [][]){
          //Instanciando Matrix de duplas do fluxo, cada ponto do fluxo tera um valor de u e v
          float fluxo[][][] = new float[frame1.length][frame1[0].length][2];
          //Calculando todas as derivadas dos frames necessarias para o calculo
-         this.frameX = this.operador.derivarX(frame1,frame2);
-         this.frameY = this.operador.derivarY(frame1,frame2);
-         this.frame1T = this.operador.derivarT1T2(frame1,frame2);
+         this.frameX = this.operador.derivarXOtimizado(frame1,frame2);
+         this.frameY = this.operador.derivarYOtimizado(frame1,frame2);
+         this.frame1T = this.operador.derivarT1T2Otimizado(frame1,frame2);
          this.frameX2 = this.elevarMatrizAoQuadrado(this.frameX);
          this.frameY2 = this.elevarMatrizAoQuadrado(this.frameY);
 
@@ -108,7 +108,7 @@ class OpticalFlow{
                      soma  += pow(uAntigo - fluxo[i][j][0],2) + pow(vAntigo - fluxo[i][j][1],2) ;
                  } 
              } 
-         }while(soma/numeroPixels >= kMax*kMax); //<>// //<>//
+         }while(soma/numeroPixels >= kMax*kMax); //<>//
          return fluxo;
     }
 

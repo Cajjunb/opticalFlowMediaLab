@@ -28,6 +28,9 @@ void setup(){
     setaUpRight = loadImage("setaUpRight.png");
     setaDownLeft = loadImage("setaDownLeft.png");
     setaDownRight = loadImage("setaDownRight.png");
+    convolucaoOperador op = new convolucaoOperador();
+    TestJunit teste = new TestJunit();
+    teste.testConvolucao();
 }
 
 
@@ -58,7 +61,7 @@ float [][][] conversaoResolucao(float fluxo[][][],int colunas, int  linhas){
 
 
 void draw(){
-    fluxoCamera = camera.calculaFluxo();
+    /*fluxoCamera = camera.calculaFluxo();
     fluxoDisplay = conversaoResolucao(fluxoCamera,colunasDisplay,linhasDisplay);
     for(int i = 0; i < linhasDisplay ; ++i){
         for(int j = 0; j < colunasDisplay; ++j){
@@ -89,4 +92,5 @@ void draw(){
         }
     }
     camera.displayFluxo();
+    */
 }

@@ -9,6 +9,9 @@ class convolucaoOperador{
 
   private int derivateT1[][] =  {{-1,-1},{-1,-1}};
   private int derivateT2[][] =  {{1,1},{1,1}};
+  private int derivateOtimizadoT1Col[] =  {-1,-1};
+  private int derivateOtimizadoT1Lin[] =  {1,1};
+  
   public  int out[][] ;
   private float media[][] = {{1/12, 1/6, 1/12},{1/6, 0, 1/6},{1/12, 1/6, 1/12}};
   public float  outVetor [][][] ;
@@ -106,7 +109,7 @@ class convolucaoOperador{
                   int jj = j + (0 - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.5* derivateXOtimizadoCol[mm] + in2[ii][jj] *0.5* derivateXOtimizadoCol[mm];  
+                      out[i][j] += in1[ii][jj] *1* derivateXOtimizadoCol[mm] + in2[ii][jj] *1* derivateXOtimizadoCol[mm];  
               }
           }
       }
@@ -123,13 +126,58 @@ class convolucaoOperador{
                   int jj = j + (n - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.5* derivateXOtimizadoLin[nn] + in2[ii][jj] *0.5* derivateXOtimizadoLin[nn];  
+                      out[i][j] += in1[ii][jj] *0.25* derivateXOtimizadoLin[nn] + in2[ii][jj] *0.25* derivateXOtimizadoLin[nn];  
               }
           }
       }
       return this.out;
     }
     
+    int[][] derivarXTeste(int in1[][],int in2[][],int kernelLin[],int kernelCol[]){
+      this.rows = in1.length;
+      this.cols = in1[0].length;
+      this.out  = new int[rows][cols];
+      int kCenterYLocal = kernelLin.length/2-1;
+      int kCenterXLocal = kernelCol.length/2-1;
+      for(int i=0; i < rows; ++i)              // rows
+      {
+          for(int j=0; j < cols; ++j)          // columns
+          {
+              out[i][j] = 0;
+              for(int m=0; m < kernelLin.length; ++m)     // derivateX rows
+              {
+                  int mm = kernelLin.length - 1 - m;      // row index of flipped derivateX
+                  // index of input signal, used for checking boundary
+                  int ii = i + (m - kCenterYLocal);
+                  int jj = j + (0 - kCenterXLocal);
+                  //print("\t mm ="+ mm+"\t ii = "+ ii +"\t jj ="+ jj +" \t i = "+i+"\tj ="+j+"\n" );
+                  // ignore input samples which are out of bound
+                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
+                      out[i][j] += in1[ii][jj] *1* kernelLin[mm] + in2[ii][jj] *1* kernelLin[mm];  
+              }
+              print("\t"+out[i][j]);
+          }
+          print("\n");
+      }
+      for(int i=0; i < rows; ++i)              // rows
+      {
+          for(int j=0; j < cols; ++j)          // columns
+          {
+              out[i][j] = 0;
+              for(int n=0; n < kernelLin.length; ++n) // derivateX columns
+              {
+                  int nn = kernelLin.length - 1 - n;  // column index of flipped derivateX
+                  // index of input signal, used for checking boundary
+                  int ii = i + (0 - kCenterYLocal);
+                  int jj = j + (n - kCenterXLocal);
+                  // ignore input samples which are out of bound
+                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
+                      out[i][j] += in1[ii][jj] *0.25* kernelCol[nn] + in2[ii][jj] *0.25* kernelCol[nn];  
+              }
+          }
+      }
+      return this.out;
+    }
     
     int[][] derivarYOtimizado(int in1[][],int in2[][]){
       this.rows = in1.length;
@@ -147,7 +195,7 @@ class convolucaoOperador{
                   int jj = j + (0 - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.5* derivateYOtimizadoCol[mm] + in2[ii][jj] *0.5* derivateYOtimizadoCol[mm];  
+                      out[i][j] += in1[ii][jj] *1* derivateYOtimizadoCol[mm] + in2[ii][jj] *1* derivateYOtimizadoCol[mm];  
               }
           }
       }
@@ -164,7 +212,7 @@ class convolucaoOperador{
                   int jj = j + (n - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.5* derivateYOtimizadoLin[nn] + in2[ii][jj] *0.5* derivateYOtimizadoLin[nn];  
+                      out[i][j] += in1[ii][jj] *0.25* derivateYOtimizadoLin[nn] + in2[ii][jj] *0.25* derivateYOtimizadoLin[nn];  
               }
           }
       }
@@ -327,13 +375,12 @@ class convolucaoOperador{
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
                   int mm = kRows - 1 - m;      // row index of flipped derivateX
-                  int nn = kCols - 1 - 0;  // column index of flipped derivateX
                   // index of input signal, used for checking boundary
                   int ii = i + (m - kCenterY);
                   int jj = j + (0 - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] * 0.25* derivateT1[mm][nn] + in2[ii][jj] * 0.25 * derivateT2[mm][nn];  
+                      out[i][j] += in1[ii][jj] * 1* derivateOtimizadoT1Col[mm] + in2[ii][jj] * 1 * derivateOtimizadoT1Col[mm];  
               }
           }
       }
@@ -344,7 +391,6 @@ class convolucaoOperador{
               out[i][j] = 0;
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
-                  int mm = kRows - 1 - m;      // row index of flipped derivateX
                   for(int n=0; n < kCols; ++n) // derivateX columns
                   {
                       int nn = kCols - 1 - n;  // column index of flipped derivateX
@@ -353,7 +399,7 @@ class convolucaoOperador{
                       int jj = j + (n - kCenterX);
                       // ignore input samples which are out of bound
                       if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                          out[i][j] += in1[ii][jj] * 0.25* derivateT1[mm][nn] + in2[ii][jj] * 0.25 * derivateT2[mm][nn];  
+                          out[i][j] += in1[ii][jj] * 0.25* (-1)*derivateOtimizadoT1Lin[nn] + in2[ii][jj] * 0.25 * (-1)*derivateOtimizadoT1Lin[nn];  
                   }
               }
           }
