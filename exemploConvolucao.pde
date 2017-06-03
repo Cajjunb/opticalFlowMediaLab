@@ -28,9 +28,6 @@ void setup(){
     setaUpRight = loadImage("setaUpRight.png");
     setaDownLeft = loadImage("setaDownLeft.png");
     setaDownRight = loadImage("setaDownRight.png");
-    convolucaoOperador op = new convolucaoOperador();
-    TestJunit teste = new TestJunit();
-    teste.testConvolucao();
 }
 
 

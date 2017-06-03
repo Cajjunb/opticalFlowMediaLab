@@ -106,7 +106,7 @@ class convolucaoOperador{
                   int mm = kRows - 1 - m;      // row index of flipped derivateX
                   // index of input signal, used for checking boundary
                   int ii = i + (m - kCenterY);
-                  int jj = j + (0 - kCenterX);
+                  int jj = j + (1 - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
                       out[i][j] += in1[ii][jj] *1* derivateXOtimizadoCol[mm] + in2[ii][jj] *1* derivateXOtimizadoCol[mm];  
@@ -122,7 +122,7 @@ class convolucaoOperador{
               {
                   int nn = kCols - 1 - n;  // column index of flipped derivateX
                   // index of input signal, used for checking boundary
-                  int ii = i + (0 - kCenterY);
+                  int ii = i + (1 - kCenterY);
                   int jj = j + (n - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
@@ -134,45 +134,50 @@ class convolucaoOperador{
     }
     
     int[][] derivarXTeste(int in1[][],int in2[][],int kernelLin[],int kernelCol[]){
-      this.rows = in1.length;
-      this.cols = in1[0].length;
+      int rows = in1.length;
+      int cols = in1[0].length;
+      int aux[][] = new int[rows][cols];
+      int kCenterYLocal = kernelLin.length/2;
+      int kCenterXLocal = kernelCol.length/2;
+      int kRows = kernelLin.length;
+      int kCols = kernelCol.length;
       this.out  = new int[rows][cols];
-      int kCenterYLocal = kernelLin.length/2-1;
-      int kCenterXLocal = kernelCol.length/2-1;
       for(int i=0; i < rows; ++i)              // rows
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
-              for(int m=0; m < kernelLin.length; ++m)     // derivateX rows
+              for(int m=0; m < kRows; ++m)     // derivateX rows
               {
-                  int mm = kernelLin.length - 1 - m;      // row index of flipped derivateX
-                  // index of input signal, used for checking boundary
-                  int ii = i + (m - kCenterYLocal);
-                  int jj = j + (0 - kCenterXLocal);
-                  //print("\t mm ="+ mm+"\t ii = "+ ii +"\t jj ="+ jj +" \t i = "+i+"\tj ="+j+"\n" );
-                  // ignore input samples which are out of bound
-                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *1* kernelLin[mm] + in2[ii][jj] *1* kernelLin[mm];  
-              }
-              print("\t"+out[i][j]);
+                  int mm = kRows - 1 - m;      // row index of flipped derivateX
+                  for(int n=0; n < 1; ++n) // derivateX columns
+                  {
+                      // index of input signal, used for checking boundary
+                      int ii = i + (m - kCenterYLocal);
+                      int jj = j + (1 - kCenterXLocal);
+                      // ignore input samples which are out of bound
+                      if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
+                          aux[i][j] += in1[ii][jj] *1* kernelLin[mm] + in2[ii][jj] *0* kernelLin[mm];
+                  }
+              }    
           }
-          print("\n");
       }
       for(int i=0; i < rows; ++i)              // rows
       {
           for(int j=0; j < cols; ++j)          // columns
           {
               out[i][j] = 0;
-              for(int n=0; n < kernelLin.length; ++n) // derivateX columns
+              for(int m=0; m < 1; ++m)     // derivateX rows
               {
-                  int nn = kernelLin.length - 1 - n;  // column index of flipped derivateX
-                  // index of input signal, used for checking boundary
-                  int ii = i + (0 - kCenterYLocal);
-                  int jj = j + (n - kCenterXLocal);
-                  // ignore input samples which are out of bound
-                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.25* kernelCol[nn] + in2[ii][jj] *0.25* kernelCol[nn];  
+                  for(int n=0; n < kCols; ++n) // derivateX columns
+                  {
+                      int nn = kCols - 1 - n;  // column index of flipped derivateX
+                      // index of input signal, used for checking boundary
+                      int ii = i + (1 - kCenterYLocal);
+                      int jj = j + (n - kCenterXLocal);
+                      // ignore input samples which are out of bound
+                      if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
+                          out[i][j] += aux[ii][jj] * kernelCol[nn] + in2[ii][jj] *0* kernelCol[nn];  
+                  }
               }
           }
       }
