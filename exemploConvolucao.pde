@@ -11,14 +11,14 @@ PImage setaRight;
 float  fluxoCamera[][][];
 float  fluxoDisplay[][][];
 
-final int  linhasDisplay = 60;
-final int  colunasDisplay = 55;
+final int  linhasDisplay = 10;
+final int  colunasDisplay = 5;
 
 
 cameraInput camera;
 
 void setup(){
-    size(700,280);
+    /*size(700,380);
     camera = new cameraInput(this);
     setaUp = loadImage("setaUp.png");
     setaDown = loadImage("setaDown.png");
@@ -28,6 +28,9 @@ void setup(){
     setaUpRight = loadImage("setaUpRight.png");
     setaDownLeft = loadImage("setaDownLeft.png");
     setaDownRight = loadImage("setaDownRight.png");
+    */
+    TestJunit opa =new TestJunit(); 
+    opa.testConvolucao();
 }
 
 
@@ -58,7 +61,8 @@ float [][][] conversaoResolucao(float fluxo[][][],int colunas, int  linhas){
 
 
 void draw(){
-    /*fluxoCamera = camera.calculaFluxo();
+    /*
+    fluxoCamera = camera.calculaFluxo();
     fluxoDisplay = conversaoResolucao(fluxoCamera,colunasDisplay,linhasDisplay);
     for(int i = 0; i < linhasDisplay ; ++i){
         for(int j = 0; j < colunasDisplay; ++j){
@@ -85,9 +89,8 @@ void draw(){
             }else{
                 fill(#ffffff);
             }
-            rect(320+j*5,i*5,5,5);
+            rect(320+j*10,i*10,10,10);
         }
     }
-    camera.displayFluxo();
-    */
+    camera.displayFluxo();*/
 }

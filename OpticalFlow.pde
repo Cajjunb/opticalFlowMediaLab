@@ -10,6 +10,13 @@ class OpticalFlow{
     private int frameX2[][];
     private int frameY2[][];
 
+    //FRAMES E DERIVADAS
+    private float frameXFloat[][];
+    private float frameYFloat[][];
+    private float frame1TFloat[][];
+    private float frameX2Float[][];
+    private float frameY2Float[][];
+
     //FLUXO
     private int flowU;
     private int flowV;
@@ -40,17 +47,35 @@ class OpticalFlow{
         }
         return out;
     }
+
+    
+    float [][] elevarMatrizAoQuadrado(float input[][]){
+        int rows = input.length;
+        int cols = input[0].length;
+        float sum  = 0;
+        float out[][] = new float[rows][cols];
+        for(int i = 0; i < rows; ++i){
+            for(int j = 0; j < cols; ++j){
+                for(int n = 0 ; n < rows; ++n){
+                    sum = sum + input[i][n] * input[n][j];   
+                }
+                out[i][j] = sum;
+            }
+        }
+        return out;
+    }
+    
     
      //<>//
     float[][][] estimarFluxo(int frame1[][],int frame2 [][]){
          //Instanciando Matrix de duplas do fluxo, cada ponto do fluxo tera um valor de u e v
          float fluxo[][][] = new float[frame1.length][frame1[0].length][2];
          //Calculando todas as derivadas dos frames necessarias para o calculo
-         this.frameX = this.operador.derivarXOtimizado(frame1,frame2);
-         this.frameY = this.operador.derivarYOtimizado(frame1,frame2);
-         this.frame1T = this.operador.derivarT1T2Otimizado(frame1,frame2);
-         this.frameX2 = this.elevarMatrizAoQuadrado(this.frameX);
-         this.frameY2 = this.elevarMatrizAoQuadrado(this.frameY);
+         this.frameXFloat = this.operador.derivarXOtimizado(frame1,frame2);
+         this.frameYFloat = this.operador.derivarYOtimizado(frame1,frame2);
+         this.frame1TFloat = this.operador.derivarT1T2Otimizado(frame1,frame2);
+         this.frameX2Float = this.elevarMatrizAoQuadrado(this.frameXFloat);
+         this.frameY2Float = this.elevarMatrizAoQuadrado(this.frameYFloat);
 
          int linhas   =  frame1.length;
          int colunas  = frame1[0].length;
@@ -97,14 +122,14 @@ class OpticalFlow{
                      valorU /= numeroMedia;
                      valorV /= numeroMedia;
                      */
-                     int p = (int)(frameX[i][j] * fluxoMedio[i][j][0] + 
-                             frameY[i][j] * fluxoMedio[i][j][1] + 
-                             frame1T[i][j]);
-                     int d = lambda + frameX[i][j]*frameX[i][j] + frameY[i][j]*frameY[i][j];
+                     float p = (frameXFloat[i][j] * fluxoMedio[i][j][0] + 
+                             frameYFloat[i][j] * fluxoMedio[i][j][1] + 
+                             frame1TFloat[i][j]);
+                     float d = lambda + frameXFloat[i][j]*frameXFloat[i][j] + frameYFloat[i][j]*frameYFloat[i][j];
                      float uAntigo = fluxo[i][j][0];
                      float vAntigo = fluxo[i][j][0] ;
-                     fluxo[i][j][0] = (int)fluxoMedio[i][j][0]  - frameX[i][j] *( p / d );
-                     fluxo[i][j][1] = (int)fluxoMedio[i][j][1]  - frameY[i][j] *( p / d );
+                     fluxo[i][j][0] = (int)fluxoMedio[i][j][0]  - frameXFloat[i][j] *( p / d );
+                     fluxo[i][j][1] = (int)fluxoMedio[i][j][1]  - frameYFloat[i][j] *( p / d );
                      soma  += pow(uAntigo - fluxo[i][j][0],2) + pow(vAntigo - fluxo[i][j][1],2) ;
                  } 
              } 

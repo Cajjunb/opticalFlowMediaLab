@@ -12,7 +12,9 @@ class convolucaoOperador{
   private int derivateOtimizadoT1Col[] =  {-1,-1};
   private int derivateOtimizadoT1Lin[] =  {1,1};
   
-  public  int out[][] ;
+  public  int   out[][] ;
+  public  float outFloat[][];
+  
   private float media[][] = {{1/12, 1/6, 1/12},{1/6, 0, 1/6},{1/12, 1/6, 1/12}};
   public float  outVetor [][][] ;
   
@@ -92,15 +94,18 @@ class convolucaoOperador{
       return this.out;
     }
 
-  int[][] derivarXOtimizado(int in1[][],int in2[][]){
+  float[][] derivarXOtimizado(int in1[][],int in2[][]){
       this.rows = in1.length;
       this.cols = in1[0].length;
-      this.out  = new int[rows][cols];
+      float aux1[][] = new float[rows][cols];
+      float aux2[][] = new float[rows][cols];
+      this.outFloat  = new float[rows][cols];
       for(int i=0; i < rows; ++i)              // rows
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
+              aux1[i][j] = 0;
+              aux2[i][j] = 0;
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
                   int mm = kRows - 1 - m;      // row index of flipped derivateX
@@ -108,8 +113,10 @@ class convolucaoOperador{
                   int ii = i + (m - kCenterY);
                   int jj = j + (1 - kCenterX);
                   // ignore input samples which are out of bound
-                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *1* derivateXOtimizadoCol[mm] + in2[ii][jj] *1* derivateXOtimizadoCol[mm];  
+                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols ){
+                       aux2[i][j] = in2[ii][jj]  * 0.25 * derivateXOtimizadoCol[mm];
+                       aux1[i][j] += in1[ii][jj] * 0.25 * derivateXOtimizadoCol[mm] ;
+                  }
               }
           }
       }
@@ -117,7 +124,7 @@ class convolucaoOperador{
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
+              outFloat[i][j] = 0;
               for(int n=0; n < kCols; ++n) // derivateX columns
               {
                   int nn = kCols - 1 - n;  // column index of flipped derivateX
@@ -126,11 +133,11 @@ class convolucaoOperador{
                   int jj = j + (n - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.25* derivateXOtimizadoLin[nn] + in2[ii][jj] *0.25* derivateXOtimizadoLin[nn];  
+                      outFloat[i][j] += aux1[ii][jj] * derivateXOtimizadoLin[nn] + aux2[ii][jj] *derivateXOtimizadoLin[nn];  
               }
           }
       }
-      return this.out;
+      return this.outFloat;
     }
     
     int[][] derivarXTeste(int in1[][],int in2[][],int kernelLin[],int kernelCol[]){
@@ -184,14 +191,18 @@ class convolucaoOperador{
       return this.out;
     }
     
-    int[][] derivarYOtimizado(int in1[][],int in2[][]){
+    float[][] derivarYOtimizado(int in1[][],int in2[][]){
       this.rows = in1.length;
       this.cols = in1[0].length;
-      this.out  = new int[rows][cols];
+      float aux1[][] = new float[rows][cols];
+      float aux2[][] = new float[rows][cols];
+      this.outFloat  = new float[rows][cols];
       for(int i=0; i < rows; ++i)              // rows
       {
           for(int j=0; j < cols; ++j)          // columns
           {
+              aux1[i][j] = 0;
+              aux2[i][j] = 0;
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
                   int mm = kRows - 1 - m;      // row index of flipped derivateX
@@ -199,8 +210,10 @@ class convolucaoOperador{
                   int ii = i + (m - kCenterY);
                   int jj = j + (0 - kCenterX);
                   // ignore input samples which are out of bound
-                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *1* derivateYOtimizadoCol[mm] + in2[ii][jj] *1* derivateYOtimizadoCol[mm];  
+                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols ){
+                       aux2[i][j] = in2[ii][jj]  * 0.25 * derivateYOtimizadoCol[mm];
+                       aux1[i][j] += in1[ii][jj] * 0.25 * derivateYOtimizadoCol[mm] ;
+                  }
               }
           }
       }
@@ -208,7 +221,7 @@ class convolucaoOperador{
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
+              outFloat[i][j] = 0;
               for(int n=0; n < kCols; ++n) // derivateX columns
               {
                   int nn = kCols - 1 - n;  // column index of flipped derivateX
@@ -217,11 +230,11 @@ class convolucaoOperador{
                   int jj = j + (n - kCenterX);
                   // ignore input samples which are out of bound
                   if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] *0.25* derivateYOtimizadoLin[nn] + in2[ii][jj] *0.25* derivateYOtimizadoLin[nn];  
+                      outFloat[i][j] += aux1[ii][jj] * derivateYOtimizadoLin[nn] + aux2[ii][jj] *derivateYOtimizadoLin[nn]; 
               }
           }
       }
-      return this.out;
+      return this.outFloat;
     }
 
 
@@ -368,15 +381,18 @@ class convolucaoOperador{
     
     
 
-    int[][] derivarT1T2Otimizado(int in1[][],int in2[][]){
+    float[][] derivarT1T2Otimizado(int in1[][],int in2[][]){
       this.rows = in1.length;
       this.cols = in1[0].length;
-      this.out  = new int[rows][cols];
+      float aux1[][] = new float[rows][cols];
+      float aux2[][] = new float[rows][cols];
+      this.outFloat  = new float[rows][cols];
       for(int i=0; i < rows; ++i)              // rows
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
+              aux1[i][j] = 0;
+              aux2[i][j] = 0;
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
                   int mm = kRows - 1 - m;      // row index of flipped derivateX
@@ -384,8 +400,10 @@ class convolucaoOperador{
                   int ii = i + (m - kCenterY);
                   int jj = j + (0 - kCenterX);
                   // ignore input samples which are out of bound
-                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                      out[i][j] += in1[ii][jj] * 1* derivateOtimizadoT1Col[mm] + in2[ii][jj] * 1 * derivateOtimizadoT1Col[mm];  
+                  if( ii >= 0 && ii < rows && jj >= 0 && jj < cols ){
+                       aux2[i][j] = in2[ii][jj]  * 0.25 * derivateXOtimizadoCol[mm];
+                       aux1[i][j] += in1[ii][jj] * 0.25 * derivateXOtimizadoCol[mm];
+                  }
               }
           }
       }
@@ -393,7 +411,7 @@ class convolucaoOperador{
       {
           for(int j=0; j < cols; ++j)          // columns
           {
-              out[i][j] = 0;
+              outFloat[i][j] = 0;
               for(int m=0; m < kRows; ++m)     // derivateX rows
               {
                   for(int n=0; n < kCols; ++n) // derivateX columns
@@ -404,12 +422,12 @@ class convolucaoOperador{
                       int jj = j + (n - kCenterX);
                       // ignore input samples which are out of bound
                       if( ii >= 0 && ii < rows && jj >= 0 && jj < cols )
-                          out[i][j] += in1[ii][jj] * 0.25* (-1)*derivateOtimizadoT1Lin[nn] + in2[ii][jj] * 0.25 * (-1)*derivateOtimizadoT1Lin[nn];  
+                          outFloat[i][j] += aux1[ii][jj] * (-1)* derivateOtimizadoT1Lin[nn] + aux2[ii][jj]*derivateXOtimizadoLin[nn];   
                   }
               }
           }
       }
-      return this.out;
+      return this.outFloat;
     }
     
     
